@@ -1,4 +1,5 @@
 ﻿using BlazorAPI.Service;
+using BlazorAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,26 +9,22 @@ namespace BlazorAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbcontext;
-        public StudentController(ApplicationDbContext dbcontext)
+        private readonly IStudentService _studentService;
+        public StudentController(IStudentService studentService)
         {
-            _dbcontext = dbcontext;
+            _studentService = studentService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudentsAsync()
         {
-            List<Student> students = await _dbcontext.Students.OrderBy(x => x.Id).ToListAsync();
-            IEnumerable<Student> studentList = students;
-            return Ok(studentList);
+            return Ok(await _studentService.GetStudentsAsync());
         }
 
         [HttpPost]
-        public async Task<ActionResult<Student>> PostStudentsAsync(Student request)
+        public async Task<ActionResult<Student>> PostStudentsAsync(Student student)
         {
-            var newStudent = _dbcontext.Students.Add(request);
-            await _dbcontext.SaveChangesAsync();
-            return newStudent.Entity;
+            return Ok(await _studentService.PostStudentsAsync(student));
         }
     }
 }

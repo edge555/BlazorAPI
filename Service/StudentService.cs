@@ -1,19 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using BlazorAPI.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAPI.Service
 {
-    public class StudentService
+    public class StudentService : IStudentService
     {
         private readonly ApplicationDbContext _dbcontext;
         public StudentService(ApplicationDbContext dbcontext)
         {
             _dbcontext = dbcontext;
         }
-        public async Task<IEnumerable<Student>> GetUsersAsync()
+        public Task<List<Student>> GetStudentsAsync()
         {
-            List<Student> students = await _dbcontext.Students.OrderBy(x => x.Id).ToListAsync();
-            IEnumerable<Student> studentList = students;
-            return studentList;
+            return _dbcontext.Students.OrderBy(x => x.Id).ToListAsync();
+        }
+
+        public async Task<Student> PostStudentsAsync(Student student)
+        {
+            var newStudent = _dbcontext.Students.Add(student);
+            await _dbcontext.SaveChangesAsync();
+            return newStudent.Entity;
         }
     }
 }
