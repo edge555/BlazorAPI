@@ -1,26 +1,23 @@
-﻿using Azure.Core;
+﻿using BlazorAPI.Repository.Interfaces;
 using BlazorAPI.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAPI.Service
 {
     public class StudentService : IStudentService
     {
-        private readonly ApplicationDbContext _dbcontext;
-        public StudentService(ApplicationDbContext dbcontext)
+        private readonly IStudentRepository _StudentRepository;
+        public StudentService(IStudentRepository StudentRepository)
         {
-            _dbcontext = dbcontext;
+            _StudentRepository = StudentRepository;
         }
         public Task<List<Student>> GetStudentsAsync()
         {
-            return _dbcontext.Students.OrderBy(x => x.Id).ToListAsync();
+            return _StudentRepository.GetStudentsAsync();
         }
 
         public async Task<Student> PostStudentsAsync(Student student)
         {
-            var newStudent = _dbcontext.Students.Add(student);
-            await _dbcontext.SaveChangesAsync();
-            return newStudent.Entity;
+            return await _StudentRepository.PostStudentAsync(student);
         }
     }
 }

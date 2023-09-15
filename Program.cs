@@ -1,4 +1,6 @@
 using BlazorAPI;
+using BlazorAPI.Repository.Interfaces;
+using BlazorAPI.Repository;
 using BlazorAPI.Service;
 using BlazorAPI.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 var app = builder.Build();
 
