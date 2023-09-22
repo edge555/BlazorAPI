@@ -1,7 +1,7 @@
-﻿using BlazorAPI.Service;
-using BlazorAPI.Service.Interfaces;
+﻿using BlazorAPI.Repository.Interfaces;
+using BlazorAPI.Services;
+using BlazorAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAPI.Controllers
 {
@@ -10,21 +10,38 @@ namespace BlazorAPI.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
-        public StudentController(IStudentService studentService)
+        private readonly IStudentRepository _studentRepository;
+        public StudentController(IStudentService studentService, IStudentRepository studentRepository)
         {
             _studentService = studentService;
+            _studentRepository = studentRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudentsAsync()
         {
-            return Ok(await _studentService.GetStudentsAsync());
+            return Ok(await _studentRepository.GetStudentsAsync());
         }
 
         [HttpPost]
-        public async Task<ActionResult<Student>> PostStudentsAsync(Student student)
+        public async Task<ActionResult<Student>> PostStudentAsync(Student student)
         {
-            return Ok(await _studentService.PostStudentsAsync(student));
+            return Ok(await _studentRepository.PostStudentAsync(student));
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<ActionResult> UpdateStudentByIdAsync(int Id, [FromBody] Student student)
+        {
+            var updatedStudent = await _studentService.UpdateStudentByIdAsync(Id, student);
+            return Ok(updatedStudent);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteStudentByIdAsync(int Id)
+        {
+            await _studentService.DeleteStudentByIdAsync(Id);
+            return NoContent();
+
         }
     }
 }

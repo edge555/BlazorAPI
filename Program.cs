@@ -1,10 +1,9 @@
 using BlazorAPI;
 using BlazorAPI.Repository.Interfaces;
 using BlazorAPI.Repository;
-using BlazorAPI.Service;
-using BlazorAPI.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
+using BlazorAPI.Services.Interfaces;
+using BlazorAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
