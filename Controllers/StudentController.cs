@@ -1,5 +1,4 @@
 ﻿using BlazorAPI.Repository.Interfaces;
-using BlazorAPI.Services;
 using BlazorAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,9 +38,16 @@ namespace BlazorAPI.Controllers
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteStudentByIdAsync(int Id)
         {
-            await _studentService.DeleteStudentByIdAsync(Id);
-            return NoContent();
-
+            try
+            {
+                await _studentService.DeleteStudentByIdAsync(Id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound("An error occurred while deleting the student.");
+            }
+           
         }
     }
 }

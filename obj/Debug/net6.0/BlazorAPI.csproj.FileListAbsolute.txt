@@ -172,3 +172,7 @@ F:\Works\C#\BlazorAPI\obj\Debug\net6.0\refint\BlazorAPI.dll
 F:\Works\C#\BlazorAPI\obj\Debug\net6.0\BlazorAPI.pdb
 F:\Works\C#\BlazorAPI\obj\Debug\net6.0\BlazorAPI.genruntimeconfig.cache
 F:\Works\C#\BlazorAPI\obj\Debug\net6.0\ref\BlazorAPI.dll
+D:\Works\BlazorAPI\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+D:\Works\BlazorAPI\bin\Debug\net6.0\System.Web.Http.dll
+D:\Works\BlazorAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Works\BlazorAPI\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
