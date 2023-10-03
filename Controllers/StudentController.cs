@@ -17,9 +17,10 @@ namespace BlazorAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudentsAsync()
+        public async Task<IActionResult> GetStudentsAsync()
         {
-            return Ok(await _studentRepository.GetStudentsAsync());
+            var students = await _studentRepository.GetStudentsAsync();
+            return Ok(students);
         }
 
         [HttpPost]
