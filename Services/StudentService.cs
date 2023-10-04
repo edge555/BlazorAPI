@@ -1,10 +1,6 @@
-﻿using Azure.Core;
-using BlazorAPI.Repository.Interfaces;
+﻿using BlazorAPI.Repository.Interfaces;
 using BlazorAPI.Services.Exceptions;
 using BlazorAPI.Services.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
-using System.Net;
-using System.Web.Http;
 
 namespace BlazorAPI.Services
 {
@@ -22,15 +18,14 @@ namespace BlazorAPI.Services
             {
                 throw new NotFoundException("Student not found.");
             }
-            var updatedStudent = await _studentRepository.UpdateStudentByIdAsync(Id, student);
-            return updatedStudent;
+            return await _studentRepository.UpdateStudentByIdAsync(Id, student);
         }
         public async Task<bool> DeleteStudentByIdAsync(int Id)
         {
             var studentData = await _studentRepository.GetStudentByIdAsync(Id);
             if (studentData == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new NotFoundException("Student not found.");
             }
             return await _studentRepository.DeleteStudentByIdAsync(Id);
         }

@@ -32,9 +32,17 @@ namespace BlazorAPI.Controllers
         [HttpPut("{Id}")]
         public async Task<ActionResult> UpdateStudentByIdAsync(int Id, [FromBody] Student student)
         {
-            var updatedStudent = await _studentService.UpdateStudentByIdAsync(Id, student);
-            return Ok(updatedStudent);
+            try
+            {
+                var updatedStudent = await _studentService.UpdateStudentByIdAsync(Id, student);
+                return Ok(updatedStudent);
+            }
+            catch (Exception ex)
+            {
+                return NotFound("An error occurred while updating the student.");
+            }
         }
+
 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteStudentByIdAsync(int Id)
@@ -46,9 +54,8 @@ namespace BlazorAPI.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound("An error occurred while deleting the student.");
+                return NotFound("An error occurred while updating the student.");
             }
-           
         }
     }
 }
