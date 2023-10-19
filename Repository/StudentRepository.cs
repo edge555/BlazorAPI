@@ -1,5 +1,7 @@
 ﻿using BlazorAPI.Repository.Interfaces;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System.Dynamic;
 
 namespace BlazorAPI.Repository
 {
@@ -10,12 +12,20 @@ namespace BlazorAPI.Repository
         {
             _dbContext = dbcontext;
         }
-        public Task<List<Student>> GetStudentsAsync()
-        {
-            return _dbContext.Students.OrderBy(x => x.Id).ToListAsync();
-        }
+		public async Task<List<dynamic>> GetStudentsAsync()
+		{
+			var sqlQuery = "SELECT * FROM items";
 
-        public async Task<Student?> GetStudentByIdAsync(int Id)
+			using (var connection = _dbContext.Database.GetDbConnection())
+			{
+				connection.Open();
+				var students = await connection.QueryAsync(sqlQuery);
+				return students.ToList();
+			}
+		}
+
+
+		public async Task<Student?> GetStudentByIdAsync(int Id)
         {
             return await _dbContext.Students.FindAsync(Id);
         }
