@@ -17,9 +17,9 @@ namespace BlazorAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStudentsAsync()
+        public async Task<IActionResult> GetStudentsAsync([FromQuery] string sqlQuery)
         {
-            var students = await _studentRepository.GetStudentsAsync();
+            var students = await _studentRepository.GetStudentsAsync(sqlQuery);
             return Ok(students);
         }
 
