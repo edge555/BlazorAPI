@@ -1,5 +1,11 @@
+
 using BlazorAPI;
+using BlazorAPI.Repository.Interfaces;
+using BlazorAPI.Repository;
 using Microsoft.EntityFrameworkCore;
+using BlazorAPI.Services.Interfaces;
+using BlazorAPI.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +27,12 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+	options.UseSqlite(builder.Configuration.GetConnectionString("SQLiteConnection"));
 });
 
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 var app = builder.Build();
 

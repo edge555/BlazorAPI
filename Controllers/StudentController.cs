@@ -1,6 +1,6 @@
-﻿using BlazorAPI.Service;
+﻿using BlazorAPI.Repository.Interfaces;
+using BlazorAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAPI.Controllers
 {
@@ -8,26 +8,54 @@ namespace BlazorAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbcontext;
-        public StudentController(ApplicationDbContext dbcontext)
+        private readonly IStudentService _studentService;
+        private readonly IStudentRepository _studentRepository;
+        public StudentController(IStudentService studentService, IStudentRepository studentRepository)
         {
-            _dbcontext = dbcontext;
+            _studentService = studentService;
+            _studentRepository = studentRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudentsAsync()
+        public async Task<IActionResult> GetStudentsAsync([FromQuery] string sqlQuery)
         {
-            List<Student> students = await _dbcontext.Students.OrderBy(x => x.Id).ToListAsync();
-            IEnumerable<Student> studentList = students;
-            return Ok(studentList);
+            var students = await _studentRepository.GetStudentsAsync(sqlQuery);
+            return Ok(students);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Student>> PostStudentsAsync(Student request)
+        public async Task<ActionResult<Student>> PostStudentAsync(Student student)
         {
-            var newStudent = _dbcontext.Students.Add(request);
-            await _dbcontext.SaveChangesAsync();
-            return newStudent.Entity;
+            return Ok(await _studentRepository.PostStudentAsync(student));
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<ActionResult> UpdateStudentByIdAsync(int Id, [FromBody] Student student)
+        {
+            try
+            {
+                var updatedStudent = await _studentService.UpdateStudentByIdAsync(Id, student);
+                return Ok(updatedStudent);
+            }
+            catch (Exception ex)
+            {
+                return NotFound("An error occurred while updating the student.");
+            }
+        }
+
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteStudentByIdAsync(int Id)
+        {
+            try
+            {
+                await _studentService.DeleteStudentByIdAsync(Id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound("An error occurred while updating the student.");
+            }
         }
     }
 }
